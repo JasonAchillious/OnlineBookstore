@@ -4,6 +4,6 @@
 # Database
 MySQL
 # Language 
-Front-end: C#\\
+Front-end: C#
 
 Back-end: JAVA

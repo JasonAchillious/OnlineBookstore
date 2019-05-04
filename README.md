@@ -1,2 +1,9 @@
 # Online_Bookstore
-This is as a course project for CS307 (the concepts of the database system). Our goal is to build an online bookstore application with a well-designed database system.
+
+1.This is as a course project for CS307 (the concepts of the database system).
+2.It's an online bookstore application with a database system.
+# Database
+MySQL
+# Language 
+Front-end: c#
+Back-end: JAVA

@@ -10,10 +10,10 @@ public class BaseDao {
     protected Connection conn;
     protected PreparedStatement pstmt;
     protected ResultSet rs;
-    protected int result;
+    //protected int result;
 
     // JDBC driver and database URL
-    static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
+    static final String JDBC_DRIVER = "com.mysql.cj.jdbc.Driver";
     static final String DB_URL = "jdbc:mysql://localhost:3306/bookstore";
     //user name and password.
     static final String USER = "team309_user1";
@@ -68,7 +68,7 @@ public class BaseDao {
     /**
      * judge if there extsts such table.
      */
-    boolean existTable(String tableName){
+    public boolean existTable(String tableName){
         DatabaseMetaData meta;
         try {
             meta = (DatabaseMetaData) conn.getMetaData();

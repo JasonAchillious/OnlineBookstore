@@ -18,12 +18,12 @@ public class LabelDaoImpl extends BaseDao implements LabelDao {
         List<String> labelList = new LinkedList<String>();
         getConnection();
 
-        String sql = "select main from label l";
+        String sql = "select name from label l";
         pstmt = conn.prepareStatement(sql);
         rs = pstmt.executeQuery();
 
         while (rs.next()){
-            labelList.add(rs.getString("main"));
+            labelList.add(rs.getString("name"));
         }
 
         closeAll();
@@ -31,14 +31,40 @@ public class LabelDaoImpl extends BaseDao implements LabelDao {
     }
 
     /**
-     * There exists some problem need to discuss with partner;
-     * The problem is no such main label and sublabel in database. All the labels are in the same levels.
+     *
+     *  hot_spot（热度） algorithm: For all the books in each sublabel
+     *  Caculate the wighting average of bought(0.8),review(0.1), danmu(0.1) amounts.
+     *
      * @param MainLabels
-     * @return
+     * @return List of sublabel order by hot_spot.
      * @throws SQLException
      */
     @Override
     public List GetSubLabels(String MainLabels) throws SQLException {
-        return null;
+        List<String> labelList = new LinkedList<String>();
+        getConnection();
+
+        String sql =
+                "selct sl.name" +
+                "( avg (bs.bus)*0.8 + avg(reviews)*0.1 + avg(danmus)*0.1 ) as hot_spot " +
+                "from sub_label sl" +
+                "join book b on b.id = sl.id" +
+                "join book_stat bs on bs.id = b,id" +
+                "join label l on sl.id = l.main_id" +
+                "group by l.id" +
+                "order by hot_spot desc" +
+                        "where l.name = ?";
+
+        pstmt.setString(1,MainLabels);
+        pstmt = conn.prepareStatement(sql);
+        rs = pstmt.executeQuery();
+
+        while (rs.next()){
+            labelList.add(rs.getString("sl.name"));
+        }
+
+        closeAll();
+
+        return labelList;
     }
 }

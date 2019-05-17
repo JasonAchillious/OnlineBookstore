@@ -43,7 +43,7 @@ public class InfoToFront {
     // Type: GetReview
     private String UserName;
     private Integer Rating; //(0-5)
-    private Long PublishTimeStap;
+    private Long TimeStap;
     private String Title;
     private String Content;
 
@@ -58,7 +58,7 @@ public class InfoToFront {
     // GetTitleDescription
     //private String Title; // Overlap with the above one in GetReview
     private String CreateUser;
-    private String EditTimeStap;
+    //private String TimeStap;
     private String Description;
     private Integer FollowAmount;
 
@@ -259,12 +259,12 @@ public class InfoToFront {
         Rating = rating;
     }
 
-    public Long getPublishTimeStap() {
-        return PublishTimeStap;
+    public Long getTimeStap() {
+        return TimeStap;
     }
 
-    public void setPublishTimeStap(Long publishTimeStap) {
-        PublishTimeStap = publishTimeStap;
+    public void setTimeStap(Long TimeStap) {
+        TimeStap = TimeStap;
     }
 
     public String getTitle() {
@@ -291,13 +291,13 @@ public class InfoToFront {
         CreateUser = createUser;
     }
 
-    public String getEditTimeStap() {
+    /*public String getEditTimeStap() {
         return EditTimeStap;
-    }
+    }*/
 
-    public void setEditTimeStap(String editTimeStap) {
+    /*public void setEditTimeStap(String editTimeStap) {
         EditTimeStap = editTimeStap;
-    }
+    }*/
 
     public String getDescription() {
         return Description;

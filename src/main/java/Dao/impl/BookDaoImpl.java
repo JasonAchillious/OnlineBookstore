@@ -4,6 +4,8 @@ import Dao.BookDao;
 import Socket.InfoToFront;
 
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
 public class BookDaoImpl extends BaseDao implements BookDao {
     /**
@@ -25,8 +27,8 @@ public class BookDaoImpl extends BaseDao implements BookDao {
         pstmt = conn.prepareStatement(sql);
         pstmt.setInt(1,bookId);
         rs = pstmt.executeQuery();
-
-        while (rs.next()){
+// if or while?
+        if (rs.next()){
             infoToFront.setBookCoverUrl(rs.getString("book_cover_url"));
             infoToFront.setBookName(rs.getString("book_name"));
             infoToFront.setAuthorName(rs.getString("author_name"));
@@ -40,17 +42,69 @@ public class BookDaoImpl extends BaseDao implements BookDao {
      * return a part of the detail of a book
      *
      * @param bookId
-     * @return
+     * @return infoToFront
      * @throws SQLException
      */
     @Override
     public InfoToFront GetBookQuasiDetail(int bookId) throws SQLException{
-        return null;
+        InfoToFront infoToFront = GetBookSummary(bookId);
+        infoToFront.setType("GetBookQuasiDetail");
+        try {
+            getConnection();
+
+            String sql = "select l.name as main,  sl.name as sub , b.original_price, bs.discount, bs.overall_rating"
+                    + "from book b"
+                    + "join book_stat bs on b.id = bs.book_id"
+                    + "join sub_label sl on b.sublabel_id = sl.id"
+                    + "Ajoin label l on sl.main_id = l.id"
+                    + "where b.id = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, bookId);
+            rs = pstmt.executeQuery();
+
+            while (rs.next())
+            {
+                infoToFront.setLabelAndSubLabel(rs.getString("main") + "-" + rs.getString("sub"));
+                infoToFront.setPrice(rs.getDouble("original_price"));
+                infoToFront.setDisCount(rs.getDouble("discount"));
+                infoToFront.setOverallRating(rs.getDouble("overall_rating"));
+            }
+
+            closeAll();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return infoToFront;
     }
 
+    /**
+     * Get all the books that a specific user bought.
+     * Final edit in 2019.5.18. Jason Zhao.
+     * @param userId
+     * @return  Integer[]
+     * @throws SQLException
+     */
     @Override
-    public int[] GetShelfBooks(int userId) throws SQLException{
-        return new int[0];
+    public Integer[] GetShelfBooks(int userId) throws SQLException{
+        List<Integer> shelf = new LinkedList<>();
+        Integer[] shelfBooks = null;
+        try {
+            getConnection();
+
+            String sql = "select book_id from transaction where user_id = ? and paied is true";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, userId);
+            rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                shelf.add(rs.getInt("book_id"));
+            }
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+
+        shelfBooks = shelf.toArray(new Integer[shelf.size()]);
+        return shelfBooks;
     }
 
     @Override
@@ -59,8 +113,8 @@ public class BookDaoImpl extends BaseDao implements BookDao {
     }
 
     @Override
-    public int[] GetRelatedBooks(int bookId, int from, int count) throws SQLException {
-        return new int[0];
+    public Integer[] GetRelatedBooks(int bookId, int from, int count) throws SQLException {
+        return null;
     }
 
     @Override

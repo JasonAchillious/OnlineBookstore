@@ -1,6 +1,7 @@
 package Dao.impl;
 
 import Dao.ReviewDao;
+import Socket.InfoFromFront;
 import Socket.InfoToFront;
 
 import java.sql.Date;
@@ -20,7 +21,7 @@ public class ReviewDaoImpl extends BaseDao implements ReviewDao {
      * @throws SQLException
      */
     @Override
-    public Integer[] GetBookReviews(int bookId, int from, int count) throws SQLException {
+    public InfoToFront GetBookReviews(int bookId, int from, int count) throws SQLException {
         LinkedList<Integer> reviewId = new LinkedList<>();
         getConnection();
 
@@ -40,7 +41,7 @@ public class ReviewDaoImpl extends BaseDao implements ReviewDao {
 
         Integer[] reId = reviewId.toArray(new Integer[reviewId.size()]);
 
-        return reId;
+        return null;
     }
 
     /**
@@ -76,5 +77,61 @@ public class ReviewDaoImpl extends BaseDao implements ReviewDao {
         }
 
         return infoToFront;
+    }
+
+    @Override
+    public InfoToFront ChangeReview(int userId, int reviewId, boolean isDeleteAction, String newTitle, String newContent, int newRating) throws SQLException
+    {
+        InfoToFront infoToFront = new InfoToFront();
+        infoToFront.setType("ChangeReview");
+
+        String sql = null;
+        if(isDeleteAction)
+        {
+            sql = "DELETE FROM review WHERE user_id = ? AND review_id = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, userId);
+            pstmt.setInt(2,reviewId);
+        }
+        else
+        {
+            sql = "set sql_safe_updates = 1" +
+                    "UPDATE review " +
+                    "SET title = ? , content = ? , rating = ?" +
+                    "WHERE review_id = ? AND user_id = ?";
+
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, newTitle);
+            pstmt.setString(2, newContent);
+            pstmt.setInt(3, newRating);
+
+        }
+        int rows = pstmt.executeUpdate();
+
+        if (rows == 1) infoToFront.setSuccess(true);
+        else infoToFront.setSuccess(false);
+
+        return infoToFront;
+    }
+
+    @Override
+    public InfoToFront CreateReview(InfoFromFront infoFromFront) throws SQLException {
+        int bookId, rating;
+        String title, content;
+        bookId = infoFromFront.getBookId();
+        rating = infoFromFront.getRating();
+        title = infoFromFront.getTitle();
+        content = infoFromFront.getContent();
+        return null;
+    }
+
+    @Override
+    public InfoToFront CheckBuyComplete(int userId, int bookId) throws SQLException {
+        return null;
+    }
+
+    @Override
+    public InfoToFront CancelTransaction(int userId, int bookId) throws SQLException {
+        return null;
     }
 }

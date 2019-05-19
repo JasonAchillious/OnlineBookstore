@@ -6,7 +6,7 @@ import Socket.InfoToFront;
 
 public class DanmuDaoImpl extends BaseDao implements DanmuDao {
 
-    public String GetDanmuContent(int danmuId) throws SQLException{
+    public InfoToFront GetDanmuContent(int danmuId) throws SQLException{
         String content = null;
         getConnection();
 
@@ -22,21 +22,59 @@ public class DanmuDaoImpl extends BaseDao implements DanmuDao {
 
         closeAll();
 
-        return content;
+        return null;
     }
 
     @Override
-    public int[] GetMyDanmus(int userId, int from, int count) throws SQLException {
-        return new int[0];
+    public InfoToFront GetMyDanmus(int userId, int from, int count) throws SQLException {
+        return null;
     }
 
     @Override
-    public int[] GetDanmuOfBook(int bookId, int page, int limit) throws SQLException {
-        return new int[0];
+    public InfoToFront GetDanmuOfBook(int bookId, int page, int limit) throws SQLException {
+        return null;
     }
 
     @Override
     public InfoToFront GetFullDanmuContent(int danmuId) throws SQLException {
+        return null;
+    }
+
+    /**
+     *
+     * @param danmuId
+     * @param isDeleteAction
+     * @param newContent
+     */
+    @Override
+    public InfoToFront ChangeDanmu(int danmuId, boolean isDeleteAction, String newContent) throws SQLException {
+        InfoToFront infoToFront = new InfoToFront();
+        infoToFront.setType("ChangeDanmu");
+        getConnection();
+        String sql = null;
+        if(isDeleteAction) {
+            sql = "DELETE FROM danmu d WHERE d.id = ?";
+        } else {
+            sql = "set sql_safe_updates = 1" +
+                    "UPDATE danmu d" +
+                    "SET content = ?" +
+                    "WHERE d.id = ?";
+        }
+
+        pstmt = conn.prepareStatement(sql);
+        int rows = pstmt.executeUpdate();
+        if (rows == 1){
+            infoToFront.setSuccess(true);
+        }else {
+            infoToFront.setSuccess(false);
+        }
+
+        closeAll();
+        return infoToFront;
+    }
+
+    @Override
+    public InfoToFront CreateDanmu(String content, int bookId, int userId, int PageNum) throws SQLException {
         return null;
     }
 }

@@ -1,9 +1,12 @@
 import Dao.impl.BillboardDaoImpl;
+import Dao.impl.BookDaoImpl;
 import Dao.impl.LabelDaoImpl;
 import com.google.gson.Gson;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
+import java.lang.reflect.TypeVariable;
 import java.util.List;
 
 public class TestReflection {
@@ -11,21 +14,11 @@ public class TestReflection {
         LabelDaoImpl labelDao = new LabelDaoImpl();
 
         try {
-            Method method = LabelDaoImpl.class.getDeclaredMethod("getMainLabels");
-            List<String> strs = (List<String>) method.invoke( labelDao);
 
-            Gson gson = new Gson();
-            String str = gson.toJson(strs);
-            System.out.println(str);
-
-            Method m = BillboardDaoImpl.class.getMethod("GetBillboardList", int.class, int.class, int.class);
-            Class[] aclass = m.getParameterTypes();
-            System.out.println(aclass);
-        }catch (NoSuchMethodException e){
-            e.printStackTrace();
-        }catch (IllegalAccessException e){
-            e.printStackTrace();
-        }catch (InvocationTargetException e){
+            Method m = BookDaoImpl.class.getMethod("GetBookDetail", int.class, int.class);
+            int a = m.getParameterCount();
+            System.out.println(a);
+        }catch (Exception e){
             e.printStackTrace();
         }
 

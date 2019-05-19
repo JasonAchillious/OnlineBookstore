@@ -44,7 +44,7 @@ public class Main {
                      */
                     //建立输出流
                     OutputStream outputStream = socket.getOutputStream();
-                    outputStream.write(ReflectionController.methodCtrl(info).getBytes("UTF-8"));
+                    //outputStream.write(ReflectionController.methodCtrl(info).getBytes("UTF-8"));
                     outputStream.close();
 
                     br.close();

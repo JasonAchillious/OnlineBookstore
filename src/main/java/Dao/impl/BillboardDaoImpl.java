@@ -1,18 +1,19 @@
 package Dao.impl;
 
 import Dao.BillboardDao;
+import Socket.InfoFromFront;
 import Socket.InfoToFront;
 
 import java.sql.SQLException;
 
 public class BillboardDaoImpl extends BaseDao implements BillboardDao {
     @Override
-    public int[] GetBillboardList(int Id, int from, int count) throws SQLException {
-        return new int[0];
+    public InfoToFront GetBillboardList(InfoFromFront infoFromFront) throws SQLException {
+        return null;
     }
 
     @Override
-    public InfoToFront GetTitleDescription(int billboardId) throws SQLException {
+    public InfoToFront GetTitleDescription(InfoFromFront infoFromFront) throws SQLException {
         return null;
     }
 }

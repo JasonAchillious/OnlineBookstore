@@ -1,25 +1,35 @@
 package Socket;
 
-import Socket.frontEnum.LoginStatus;
+
+
+import java.util.List;
 
 public class InfoToFront {
     private int UserId = -1;
     private String Type;
+    private Integer[] IDs;
+    private String URL;
 
     // Type: Login
-    private Socket.frontEnum.LoginStatus LoginStatus;
+    private Integer LoginStatus;
     private Boolean IsAdmin;
+
+    // Type: Get Main and sub Labels
+    private String[] MainLabels;
+    private String[] SubLabels;
 
     // Type:GetBookSummary
     private String BookCoverUrl;
     private String BookName;
+
     private String AuthorName;
 
     // Type: GetBookQuasiDetail: Followings + above "GetBookSummary"
-    private String LabelAndSubLabel;
+    private String MainAndSubLabel;
     private Double Price; // non-negative
-    private Double DisCount; // (0 < DisCount < 100)
+    private Integer DisCount; // (0 < DisCount < 100)
     private Double OverallRating;
+
 
 
     // Type: GetBookDetail: Doesn't need to return the info of "GetBookSummary".
@@ -30,6 +40,7 @@ public class InfoToFront {
     private Integer ReviewAmount;
     private Integer PageCount;
     private String ISBN;
+
     // Followings need to concern and discuss
     private String OtherAuthors;
     private String PublishInfo;
@@ -48,12 +59,14 @@ public class InfoToFront {
     private String Content;
 
     // Type: GetShelfBooks
-    //private Integer[] BookIDs;
+    // private Integer[] BookIDs;
 
     /**
      * GetFromQuery
      * @return
      */
+
+
 
     // GetTitleDescription
     //private String Title; // Overlap with the above one in GetReview
@@ -66,6 +79,27 @@ public class InfoToFront {
     //private String Content;  //Overlap with the above one in GetReview
     //private String BookName; // repeat again with the one in GetBookSummary
     private Integer PageNum;
+
+    private String PrivateKey;
+
+    /**
+     * Followings are the return-to-front info about updating and creating.
+     */
+    private Boolean Success;
+
+
+    /**
+     * Getter and Setter
+     * return this.fields
+     */
+
+    public Boolean getSuccess() {
+        return Success;
+    }
+
+    public void setSuccess(Boolean success) {
+        Success = success;
+    }
 
     public int getUserId() {
         return UserId;
@@ -83,12 +117,13 @@ public class InfoToFront {
         Type = type;
     }
 
-    public Socket.frontEnum.LoginStatus getLoginStatus() {
+    public Integer getLoginStatus() {
         return LoginStatus;
     }
 
-    public void setLoginStatus(Socket.frontEnum.LoginStatus loginStatus) {
-        LoginStatus = loginStatus;
+    public void setLoginStatus(Socket.frontEnum.LoginStatus loginStatus)
+    {
+        LoginStatus = loginStatus.ordinal();
     }
 
     public Boolean getAdmin() {
@@ -124,11 +159,11 @@ public class InfoToFront {
     }
 
     public String getLabelAndSubLabel() {
-        return LabelAndSubLabel;
+        return MainAndSubLabel;
     }
 
     public void setLabelAndSubLabel(String labelAndSubLabel) {
-        LabelAndSubLabel = labelAndSubLabel;
+        MainAndSubLabel = labelAndSubLabel;
     }
 
     public Double getPrice() {
@@ -139,11 +174,11 @@ public class InfoToFront {
         Price = price;
     }
 
-    public Double getDisCount() {
+    public Integer getDisCount() {
         return DisCount;
     }
 
-    public void setDisCount(Double disCount) {
+    public void setDisCount(Integer disCount) {
         DisCount = disCount;
     }
 

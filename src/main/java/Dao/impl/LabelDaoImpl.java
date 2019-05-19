@@ -1,6 +1,7 @@
 package Dao.impl;
 
 import Dao.LabelDao;
+import Socket.InfoToFront;
 
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -14,7 +15,7 @@ public class LabelDaoImpl extends BaseDao implements LabelDao {
      * Now the version is to get all the Label
      */
     @Override
-    public List GetMainLabels() throws SQLException {
+    public InfoToFront GetMainLabels() throws SQLException {
         List<String> labelList = new LinkedList<String>();
         getConnection();
 
@@ -27,7 +28,7 @@ public class LabelDaoImpl extends BaseDao implements LabelDao {
         }
 
         closeAll();
-        return labelList;
+        return null;
     }
 
     /**
@@ -40,8 +41,9 @@ public class LabelDaoImpl extends BaseDao implements LabelDao {
      * @throws SQLException
      */
     @Override
-    public List GetSubLabels(String MainLabels) throws SQLException {
+    public InfoToFront GetSubLabels(String MainLabels) throws SQLException {
         List<String> labelList = new LinkedList<String>();
+        InfoToFront infoToFront = new InfoToFront();
         getConnection();
 
         String sql =
@@ -64,7 +66,6 @@ public class LabelDaoImpl extends BaseDao implements LabelDao {
         }
 
         closeAll();
-
-        return labelList;
+        return null;
     }
 }

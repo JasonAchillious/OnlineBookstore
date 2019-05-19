@@ -1,10 +1,12 @@
 package Dao;
 
+import Socket.InfoToFront;
+
 import java.sql.SQLException;
 
 public interface WishlistDao {
 
     // get the books' id from a user's wishlist
-    int[] GetMyWishlist(int userId) throws SQLException;
+    InfoToFront GetMyWishlist(int userId) throws SQLException;
 
 }

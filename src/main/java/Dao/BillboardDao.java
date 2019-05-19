@@ -1,5 +1,6 @@
 package Dao;
 
+import Socket.InfoFromFront;
 import Socket.InfoToFront;
 
 import java.sql.SQLException;
@@ -7,8 +8,8 @@ import java.sql.SQLException;
 public interface BillboardDao {
 
     // Get the book's id of a billboard.
-    int[] GetBillboardList(int Id, int from, int count) throws SQLException;
+    InfoToFront GetBillboardList(InfoFromFront infoFromFront) throws SQLException;
 
     // get the details of this billboard.
-    InfoToFront GetTitleDescription(int billboardId) throws SQLException;
+    InfoToFront GetTitleDescription(InfoFromFront infoFromFront) throws SQLException;
 }

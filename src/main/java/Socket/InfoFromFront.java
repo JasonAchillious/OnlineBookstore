@@ -68,6 +68,26 @@ public class InfoFromFront {
 
     private Integer Rating;
 
+    private Boolean IsFollowAction;
+
+    private String MailAddr;
+
+    public String getMailAddr() {
+        return MailAddr;
+    }
+
+    public void setMailAddr(String mailAddr) {
+        MailAddr = mailAddr;
+    }
+
+    public Boolean getFollowAction() {
+        return IsFollowAction;
+    }
+
+    public void setFollowAction(Boolean followAction) {
+        IsFollowAction = followAction;
+    }
+
     public int getUserId() {
         return UserId;
     }

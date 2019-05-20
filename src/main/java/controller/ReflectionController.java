@@ -1,8 +1,7 @@
 package controller;
 
-import Dao.impl.BaseDao;
+import Socket.DataToFront;
 import Socket.InfoFromFront;
-import Socket.InfoToFront;
 import com.google.gson.Gson;
 import service.DAOFactory;
 import service.impl.DAOFactoryImpl;
@@ -21,38 +20,41 @@ public class ReflectionController {
      * @throws Exception
      */
 
-    public String methodCtrl(String frontInfo) throws Exception
+    public DataToFront methodCtrl(String frontInfo) throws Exception
     {
-        String infoToFront = null;
-
         Gson gson = new Gson();
-
-        Method method = null;
+        InfoFromFront infoFromFront = gson.fromJson(frontInfo, InfoFromFront.class);
 
         DAOFactory factory = new DAOFactoryImpl();
 
-            InfoFromFront infoFromFront = gson.fromJson(frontInfo, InfoFromFront.class);
-            String type = infoFromFront.getType();
+        String type = infoFromFront.getType();
 
-            Object baseDao = factory.getBaseDao(type);
+        // According to the method, find the corresponding object. baseDao <- son of BaseDao.
+        Object baseDao = factory.getBaseDao(type);
 
-            Method[] methods = baseDao.getClass().getMethods();
-            for (int i = 0; i < methods.length; i++) {
-                if (methods[i].getName().equalsIgnoreCase(type)) method = methods[i];
-            }
+        Method method = null;
+        Method[] methods = baseDao.getClass().getMethods();
+        for (int i = 0; i < methods.length; i++) {
+            if (methods[i].getName().equalsIgnoreCase(type))
+                    method = methods[i];
+        }
 
-            infoToFront = gson.toJson(method.invoke(baseDao, dataCtrl(frontInfo)));
+        Object infoToFront = method.invoke(baseDao, infoFromFront);
 
-            return infoToFront;
+        if (infoToFront instanceof DataToFront){
+            return (DataToFront) infoToFront;
+        }
+
+        return null;
 
     }
-
+/*
     /**
      *
      * @param frontInfo
      * @return
      */
-
+/*
     private Object[] dataCtrl(String frontInfo)
     {
         Gson gson = new Gson();
@@ -91,7 +93,7 @@ public class ReflectionController {
         return parameters;
     }
 
-
+*/
 }
 
 

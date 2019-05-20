@@ -2,11 +2,14 @@ package Dao.impl;
 import java.sql.SQLException;
 
 import Dao.DanmuDao;
-import Socket.InfoToFront;
+import Socket.DataToFront;
+import Socket.InfoFromFront;
 
 public class DanmuDaoImpl extends BaseDao implements DanmuDao {
 
-    public InfoToFront GetDanmuContent(int danmuId) throws SQLException{
+    public DataToFront GetDanmuContent(InfoFromFront infoFromFront) throws SQLException{
+        int danmuId = infoFromFront.getDanmuId();
+        DataToFront dataToFront = new DataToFront();
         String content = null;
         getConnection();
 
@@ -18,38 +21,54 @@ public class DanmuDaoImpl extends BaseDao implements DanmuDao {
 
         while (rs.next()){
             content = rs.getString("content");
+            dataToFront.setContent(content);
         }
 
         closeAll();
 
+        return dataToFront;
+    }
+
+    @Override
+    public DataToFront GetMyDanmus(InfoFromFront infoFromFront) throws SQLException {
+        int userId, from, count;
+        userId = infoFromFront.getUserId();
+        from = infoFromFront.getFrom();
+        count = infoFromFront.getCount();
+
         return null;
     }
 
     @Override
-    public InfoToFront GetMyDanmus(int userId, int from, int count) throws SQLException {
+    public DataToFront GetDanmuOfBook(InfoFromFront infoFromFront) throws SQLException {
+        int bookId, page, limit;
+        bookId = infoFromFront.getBookId();
+        page = infoFromFront.getPage();
+
         return null;
     }
 
     @Override
-    public InfoToFront GetDanmuOfBook(int bookId, int page, int limit) throws SQLException {
-        return null;
-    }
-
-    @Override
-    public InfoToFront GetFullDanmuContent(int danmuId) throws SQLException {
+    public DataToFront GetFullDanmuContent(InfoFromFront infoFromFront) throws SQLException
+    {
+        int danmuId = infoFromFront.getDanmuId();
         return null;
     }
 
     /**
-     *
-     * @param danmuId
-     * @param isDeleteAction
-     * @param newContent
+     * @param infoFromFront
+     * param danmuId
+     * param isDeleteAction
+     * param newContent
      */
     @Override
-    public InfoToFront ChangeDanmu(int danmuId, boolean isDeleteAction, String newContent) throws SQLException {
-        InfoToFront infoToFront = new InfoToFront();
-        infoToFront.setType("ChangeDanmu");
+    public DataToFront ChangeDanmu(InfoFromFront infoFromFront) throws SQLException {
+        DataToFront dataToFront = new DataToFront();
+        dataToFront.setType("ChangeDanmu");
+        int danmuId = infoFromFront.getDanmuId();
+        boolean isDeleteAction = infoFromFront.getDeleteAction();
+        String newContent = infoFromFront.getNewContent();
+
         getConnection();
         String sql = null;
         if(isDeleteAction) {
@@ -64,17 +83,23 @@ public class DanmuDaoImpl extends BaseDao implements DanmuDao {
         pstmt = conn.prepareStatement(sql);
         int rows = pstmt.executeUpdate();
         if (rows == 1){
-            infoToFront.setSuccess(true);
+            dataToFront.setSuccess(true);
         }else {
-            infoToFront.setSuccess(false);
+            dataToFront.setSuccess(false);
         }
 
         closeAll();
-        return infoToFront;
+        return dataToFront;
     }
 
     @Override
-    public InfoToFront CreateDanmu(String content, int bookId, int userId, int PageNum) throws SQLException {
+    public DataToFront CreateDanmu(InfoFromFront infoFromFront) throws SQLException {
+        String content;
+        int bookId, userId, pageNum;
+        content = infoFromFront.getContent();
+        bookId = infoFromFront.getBookId();
+        userId = infoFromFront.getUserId();
+        pageNum = infoFromFront.getPageNum();
         return null;
     }
 }

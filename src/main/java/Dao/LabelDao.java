@@ -1,12 +1,12 @@
 package Dao;
 
-import Socket.InfoToFront;
+import Socket.DataToFront;
+import Socket.InfoFromFront;
 
 import java.sql.SQLException;
-import java.util.List;
 
 public interface LabelDao {
-    InfoToFront GetMainLabels() throws SQLException;
+    DataToFront GetMainLabels(InfoFromFront infoFromFront) throws SQLException;
 
-    InfoToFront GetSubLabels(String mainLabels) throws SQLException;
+    DataToFront GetSubLabels(InfoFromFront infoFromFront) throws SQLException;
 }

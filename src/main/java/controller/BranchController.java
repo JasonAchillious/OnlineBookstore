@@ -1,11 +1,7 @@
 package controller;
 
-import Dao.impl.BillboardDaoImpl;
-import Dao.impl.BookDaoImpl;
-import Dao.impl.LabelDaoImpl;
-import Dao.impl.UserDaoImpl;
+import Socket.DataToFront;
 import Socket.InfoFromFront;
-import Socket.InfoToFront;
 import com.google.gson.Gson;
 
 import java.util.List;
@@ -21,7 +17,7 @@ public class BranchController {
 
         String type = infoFromFront.getType();
 
-        InfoToFront infoToFront;
+        DataToFront dataToFront;
         List list;
         Integer[] ints;
         try {

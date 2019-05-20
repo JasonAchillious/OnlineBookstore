@@ -1,10 +1,9 @@
 package Dao.impl;
 
 import Dao.ReviewDao;
+import Socket.DataToFront;
 import Socket.InfoFromFront;
-import Socket.InfoToFront;
 
-import java.sql.Date;
 import java.sql.SQLException;
 import java.util.LinkedList;
 
@@ -14,14 +13,18 @@ public class ReviewDaoImpl extends BaseDao implements ReviewDao {
      * issue: The database has no review id. need to discuss.
      * Get the ReviewId from n to n+count order by recently edited time.
      * Finally edited in 2019.5.18. Jason Zhao.
-     * @param bookId
-     * @param from
-     * @param count
-     * @return Integer[]
+     * param bookId
+     * param from
+     * param count
+     * return Integer[]
      * @throws SQLException
      */
     @Override
-    public InfoToFront GetBookReviews(int bookId, int from, int count) throws SQLException {
+    public DataToFront GetBookReviews(InfoFromFront infoFromFront) throws SQLException {
+        int bookId, from, count;
+        bookId = infoFromFront.getBookId();
+        from = infoFromFront.getFrom();
+        count = infoFromFront.getCount();
         LinkedList<Integer> reviewId = new LinkedList<>();
         getConnection();
 
@@ -47,14 +50,15 @@ public class ReviewDaoImpl extends BaseDao implements ReviewDao {
     /**
      * Get the details of a specific review.
      * Finally edited in 2019.5.18. Jason Zhao.
-     * @param reviewId
-     * @return InfoToFront
+     * param reviewId
+     * @return DataToFront
      * @throws SQLException
      */
     @Override
-    public InfoToFront GetReviews(int reviewId) throws SQLException {
-        InfoToFront infoToFront = new InfoToFront();
-        infoToFront.setType("GetReview");
+    public DataToFront GetReviews(InfoFromFront infoFromFront) throws SQLException {
+        int reviewId = infoFromFront.getReviewId();
+        DataToFront dataToFront = new DataToFront();
+        dataToFront.setType("GetReview");
 
         getConnection();
 
@@ -68,22 +72,28 @@ public class ReviewDaoImpl extends BaseDao implements ReviewDao {
 
 
         while (rs.next()){
-            infoToFront.setCreateUser(rs.getString("user_id"));
-            infoToFront.setRating(rs.getInt("rating"));
-            infoToFront.setTimeStap(rs.getTimestamp("edit_time").getTime());
-            infoToFront.setTitle(rs.getString("title"));
-            infoToFront.setContent(rs.getString("content"));
-            infoToFront.setBookName(rs.getString("book_name"));
+            dataToFront.setCreateUser(rs.getString("user_id"));
+            dataToFront.setRating(rs.getInt("rating"));
+            dataToFront.setTimeStap(rs.getTimestamp("edit_time").getTime());
+            dataToFront.setTitle(rs.getString("title"));
+            dataToFront.setContent(rs.getString("content"));
+            dataToFront.setBookName(rs.getString("book_name"));
         }
 
-        return infoToFront;
+        return dataToFront;
     }
 
     @Override
-    public InfoToFront ChangeReview(int userId, int reviewId, boolean isDeleteAction, String newTitle, String newContent, int newRating) throws SQLException
+    public DataToFront ChangeReview(InfoFromFront infoFromFront) throws SQLException
     {
-        InfoToFront infoToFront = new InfoToFront();
-        infoToFront.setType("ChangeReview");
+        int userId = infoFromFront.getUserId();
+        int reviewId = infoFromFront.getReviewId();
+        boolean isDeleteAction = infoFromFront.getDeleteAction();
+        String newTitle = infoFromFront.getTitle();
+        String newContent = infoFromFront.getNewContent();
+        int newRating = infoFromFront.getRating();
+        DataToFront dataToFront = new DataToFront();
+        dataToFront.setType("ChangeReview");
 
         String sql = null;
         if(isDeleteAction)
@@ -108,14 +118,14 @@ public class ReviewDaoImpl extends BaseDao implements ReviewDao {
         }
         int rows = pstmt.executeUpdate();
 
-        if (rows == 1) infoToFront.setSuccess(true);
-        else infoToFront.setSuccess(false);
+        if (rows == 1) dataToFront.setSuccess(true);
+        else dataToFront.setSuccess(false);
 
-        return infoToFront;
+        return dataToFront;
     }
 
     @Override
-    public InfoToFront CreateReview(InfoFromFront infoFromFront) throws SQLException {
+    public DataToFront CreateReview(InfoFromFront infoFromFront) throws SQLException {
         int bookId, rating;
         String title, content;
         bookId = infoFromFront.getBookId();
@@ -126,12 +136,12 @@ public class ReviewDaoImpl extends BaseDao implements ReviewDao {
     }
 
     @Override
-    public InfoToFront CheckBuyComplete(int userId, int bookId) throws SQLException {
+    public DataToFront CheckBuyComplete(InfoFromFront infoFromFront) throws SQLException {
+        int userId = infoFromFront.getUserId();
+        int bookId = infoFromFront.getBookId();
+
         return null;
     }
 
-    @Override
-    public InfoToFront CancelTransaction(int userId, int bookId) throws SQLException {
-        return null;
-    }
+
 }

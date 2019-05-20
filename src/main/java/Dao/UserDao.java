@@ -1,16 +1,18 @@
 package Dao;
 
+import Socket.DataToFront;
 import Socket.InfoFromFront;
-import Socket.InfoToFront;
 
 import java.sql.SQLException;
 
 public interface UserDao {
+
     // Check the user's info and return
-    InfoToFront Login(String userName, String encodedPassword) throws SQLException;
+    DataToFront Login(InfoFromFront infoFromFront) throws SQLException;
 
-    // get the readlists' Id (created or followed) by a user
-    InfoToFront GetMyReadList(int id, int from , int count) throws SQLException;
+    // get the readlists' Id (created or followed) by a user.
+    DataToFront GetMyReadList(InfoFromFront infoFromFront) throws SQLException;
 
-    InfoToFront SignUp(String userName, String mailAddr, String encodedPassword) throws SQLException;
+    // user register.
+    DataToFront SignUp(InfoFromFront infoFromFront) throws SQLException;
 }

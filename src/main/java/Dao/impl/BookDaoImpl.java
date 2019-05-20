@@ -2,9 +2,8 @@ package Dao.impl;
 
 import Dao.BookDao;
 import Socket.InfoFromFront;
-import Socket.InfoToFront;
+import Socket.DataToFront;
 
-import javax.sound.sampled.Line;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,11 +17,11 @@ public class BookDaoImpl extends BaseDao implements BookDao {
      * @throws SQLException
      */
     @Override
-    public InfoToFront GetBookSummary(InfoFromFront infoFromFront) throws SQLException {
+    public DataToFront GetBookSummary(InfoFromFront infoFromFront) throws SQLException {
         int bookId = infoFromFront.getBookId();
 
-        InfoToFront infoToFront = new InfoToFront();
-        infoToFront.setType("GetBookSummary");
+        DataToFront dataToFront = new DataToFront();
+        dataToFront.setType("GetBookSummary");
         getConnection();
 
         String sql = " select b.name as book_name, book_cover_url, a.name as author_name" +
@@ -35,13 +34,13 @@ public class BookDaoImpl extends BaseDao implements BookDao {
         rs = pstmt.executeQuery();
 // if or while?
         if (rs.next()){
-            infoToFront.setBookCoverUrl(rs.getString("book_cover_url"));
-            infoToFront.setBookName(rs.getString("book_name"));
-            infoToFront.setAuthorName(rs.getString("author_name"));
+            dataToFront.setBookCoverUrl(rs.getString("book_cover_url"));
+            dataToFront.setBookName(rs.getString("book_name"));
+            dataToFront.setAuthorName(rs.getString("author_name"));
         }
 
         closeAll();
-        return infoToFront;
+        return dataToFront;
     }
 
     /**
@@ -52,10 +51,10 @@ public class BookDaoImpl extends BaseDao implements BookDao {
      * @throws SQLException
      */
     @Override
-    public InfoToFront GetBookQuasiDetail(InfoFromFront infoFromFront) throws SQLException{
-        InfoToFront infoToFront = GetBookSummary(infoFromFront);
+    public DataToFront GetBookQuasiDetail(InfoFromFront infoFromFront) throws SQLException{
+        DataToFront dataToFront = GetBookSummary(infoFromFront);
         int bookId = infoFromFront.getBookId();
-        infoToFront.setType("GetBookQuasiDetail");
+        dataToFront.setType("GetBookQuasiDetail");
         try {
             getConnection();
 
@@ -71,17 +70,17 @@ public class BookDaoImpl extends BaseDao implements BookDao {
 
             while (rs.next())
             {
-                infoToFront.setLabelAndSubLabel(rs.getString("main") + "-" + rs.getString("sub"));
-                infoToFront.setPrice(rs.getDouble("original_price"));
-                infoToFront.setDisCount(rs.getInt("discount"));
-                infoToFront.setOverallRating(rs.getDouble("overall_rating"));
+                dataToFront.setLabelAndSubLabel(rs.getString("main") + "-" + rs.getString("sub"));
+                dataToFront.setPrice(rs.getDouble("original_price"));
+                dataToFront.setDisCount(rs.getInt("discount"));
+                dataToFront.setOverallRating(rs.getDouble("overall_rating"));
             }
 
             closeAll();
         }catch (SQLException e){
             e.printStackTrace();
         }
-        return infoToFront;
+        return dataToFront;
     }
 
     /**
@@ -93,7 +92,7 @@ public class BookDaoImpl extends BaseDao implements BookDao {
      * @throws SQLException
      */
     @Override
-    public InfoToFront GetShelfBooks(InfoFromFront infoFromFront) throws SQLException{
+    public DataToFront GetShelfBooks(InfoFromFront infoFromFront) throws SQLException{
         int userId = infoFromFront.getUserId();
         List<Integer> shelf = new LinkedList<>();
         Integer[] shelfBooks = null;
@@ -124,7 +123,7 @@ public class BookDaoImpl extends BaseDao implements BookDao {
      *              if the result set is null then the user can add or buy this book.
      *
      * @param infoFromFront
-     * @return InfoToFront
+     * @return DataToFront
      *          OtherAuthors (name1(isTranlator) name2....)
      *          Decription of this book
      *          PublishInfo "Press / publish_time / edition"
@@ -136,8 +135,8 @@ public class BookDaoImpl extends BaseDao implements BookDao {
      * @throws SQLException
      */
     @Override
-    public InfoToFront GetBookDetail(InfoFromFront infoFromFront) throws SQLException {
-        InfoToFront infoToFront = GetBookQuasiDetail(infoFromFront);
+    public DataToFront GetBookDetail(InfoFromFront infoFromFront) throws SQLException {
+        DataToFront dataToFront = GetBookQuasiDetail(infoFromFront);
 
         int bookId = infoFromFront.getBookId();
         int userId = infoFromFront.getUserId();
@@ -166,7 +165,7 @@ public class BookDaoImpl extends BaseDao implements BookDao {
 
         }
 
-        infoToFront.setOtherAuthors(stringBuilder.toString().trim());
+        dataToFront.setOtherAuthors(stringBuilder.toString().trim());
 
         String bookDetailSQL = "select b.description, b.publish_time, b.version, p.name, b.ISBN, b.pages, bs.buys, bs.danmus, bs.previews, bs.reviews" +
                 "from book b join book_stat bs on b.id = bs.book_id join press p on b.press_id = p.id" +
@@ -178,19 +177,19 @@ public class BookDaoImpl extends BaseDao implements BookDao {
 
         while (rs.next())
         {
-            infoToFront.setDescription(rs.getString("description"));
-            infoToFront.setISBN(rs.getString("ISBN"));
-            infoToFront.setBuyAmount(rs.getInt("buys"));
-            infoToFront.setDanmuAmount(rs.getInt("danmus"));
-            infoToFront.setPreviewAmount(rs.getInt("previews"));
-            infoToFront.setReviewAmount(rs.getInt("reviews"));
-            infoToFront.setPageCount(rs.getInt("pages"));
+            dataToFront.setDescription(rs.getString("description"));
+            dataToFront.setISBN(rs.getString("ISBN"));
+            dataToFront.setBuyAmount(rs.getInt("buys"));
+            dataToFront.setDanmuAmount(rs.getInt("danmus"));
+            dataToFront.setPreviewAmount(rs.getInt("previews"));
+            dataToFront.setReviewAmount(rs.getInt("reviews"));
+            dataToFront.setPageCount(rs.getInt("pages"));
 
             String pressName = rs.getString("name");
             String publish_Time = rs.getDate("publish_time").toString();
             String version = rs.getString("version");
 
-            infoToFront.setPublishInfo(pressName + " / " + publish_Time + " / " + version);
+            dataToFront.setPublishInfo(pressName + " / " + publish_Time + " / " + version);
 
         }
 
@@ -206,9 +205,9 @@ public class BookDaoImpl extends BaseDao implements BookDao {
             rs = pstmt.executeQuery();
 
             if (rs.next() == false)
-                infoToFront.setCanAddReadList(true);
+                dataToFront.setCanAddReadList(true);
             else
-                infoToFront.setCanAddReadList(false);
+                dataToFront.setCanAddReadList(false);
 
             //
             String canAddWishlistSQL = "select w.user_id, w.book_id from wish_list w\n" +
@@ -219,9 +218,9 @@ public class BookDaoImpl extends BaseDao implements BookDao {
             rs = pstmt.executeQuery();
 
             if (rs.next() == false)
-                infoToFront.setCanAddWishList(true);
+                dataToFront.setCanAddWishList(true);
             else
-                infoToFront.setCanAddWishList(false);
+                dataToFront.setCanAddWishList(false);
 
             //
             String canBuySQL = "select user_id, book_id, paied from transaction\n" +
@@ -233,15 +232,15 @@ public class BookDaoImpl extends BaseDao implements BookDao {
             rs = pstmt.executeQuery();
 
             if (rs.next() == false)
-                infoToFront.setCanBuy(true);
+                dataToFront.setCanBuy(true);
             else
-                infoToFront.setCanBuy(false);
+                dataToFront.setCanBuy(false);
         }
-        return infoToFront;
+        return dataToFront;
     }
 
     @Override
-    public InfoToFront GetRelatedBooks(InfoFromFront infoFromFront) throws SQLException {
+    public DataToFront GetRelatedBooks(InfoFromFront infoFromFront) throws SQLException {
         int bookId = infoFromFront.getBookId();
         int from = infoFromFront.getFrom();
         int count = infoFromFront.getCount();
@@ -249,39 +248,39 @@ public class BookDaoImpl extends BaseDao implements BookDao {
     }
 
     @Override
-    public InfoToFront GetBookPreview(InfoFromFront infoFromFront) throws SQLException {
+    public DataToFront GetBookPreview(InfoFromFront infoFromFront) throws SQLException {
         int bookId = infoFromFront.getBookId();
         return null;
     }
 
     @Override
-    public InfoToFront DownloadBook(InfoFromFront infoFromFront) throws SQLException {
+    public DataToFront DownloadBook(InfoFromFront infoFromFront) throws SQLException {
         int bookId = infoFromFront.getBookId();
         return null;
     }
 
     @Override
-    public InfoToFront GetBookKey(InfoFromFront infoFromFront) throws SQLException {
+    public DataToFront GetBookKey(InfoFromFront infoFromFront) throws SQLException {
         int bookId = infoFromFront.getBookId();
         return null;
     }
 
     @Override
-    public InfoToFront BuyBook(InfoFromFront infoFromFront) throws SQLException {
+    public DataToFront BuyBook(InfoFromFront infoFromFront) throws SQLException {
         int userId = infoFromFront.getUserId();
         int bookId = infoFromFront.getBookId();
         return null;
     }
 
     @Override
-    public InfoToFront CheckBuyComplete(InfoFromFront infoFromFront) throws SQLException {
+    public DataToFront CheckBuyComplete(InfoFromFront infoFromFront) throws SQLException {
         int userId = infoFromFront.getUserId();
         int bookId = infoFromFront.getBookId();
         return null;
     }
 
     @Override
-    public InfoToFront CancelTransaction(InfoFromFront infoFromFront) throws SQLException {
+    public DataToFront CancelTransaction(InfoFromFront infoFromFront) throws SQLException {
         int userId = infoFromFront.getUserId();
         int bookId = infoFromFront.getBookId();
         return null;

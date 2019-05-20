@@ -1,33 +1,52 @@
 package Dao.impl;
 
 import Dao.ReadlistDao;
-import Socket.InfoToFront;
+import Socket.DataToFront;
+import Socket.InfoFromFront;
+import Socket.frontEnum.ChangeType;
 
 import java.sql.SQLException;
 
 public class ReadlistDaoImpl extends BaseDao implements ReadlistDao {
     @Override
-    public InfoToFront GetMyReadlist(int userId, int from, int count) {
+    public DataToFront GetMyReadlist(InfoFromFront infoFromFront) {
+        int userId, from, count;
+        userId = infoFromFront.getUserId();
+        from = infoFromFront.getFrom();
+        count = infoFromFront.getCount();
         return null;
     }
 
     @Override
-    public InfoToFront GetTitleDescription(int readlistId) {
+    public DataToFront GetTitleDescription(InfoFromFront infoFromFront) {
+        int readlistId  = infoFromFront.getReadListId();
         return null;
     }
 
     @Override
-    public InfoToFront ChangeReadList(int readListId, Enum ChangeType, int AlteredBookId, String AlteredText) {
+    public DataToFront ChangeReadList(InfoFromFront infoFromFront) {
+        int readListId, alteredBookId;
+        ChangeType changeType = ChangeType.values()[infoFromFront.getChangeType()];
+        String alteredText;
+        readListId = infoFromFront.getReadListId();
+        alteredBookId = infoFromFront.getAlteredBookId();
         return null;
     }
 
     @Override
-    public InfoToFront CreateReadList(int userId, String Title, String Description) throws SQLException {
+    public DataToFront CreateReadList(InfoFromFront infoFromFront) throws SQLException {
+        int userId = infoFromFront.getUserId();
+        String title = infoFromFront.getTitle();
+        String description = infoFromFront.getDescription();
+
         return null;
     }
 
     @Override
-    public InfoToFront FollowReadList(int userId, boolean isFollowAction, int readlistId) throws SQLException {
+    public DataToFront FollowReadList(InfoFromFront infoFromFront) throws SQLException {
+        int UserId = infoFromFront.getUserId();
+        boolean isFollowAction = infoFromFront.getFollowAction();
+        int readlistId;
         return null;
     }
 

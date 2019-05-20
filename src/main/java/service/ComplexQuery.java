@@ -1,10 +1,10 @@
 package service;
 
-import Socket.InfoToFront;
+import Socket.DataToFront;
 
 import java.sql.SQLException;
 
 public interface ComplexQuery {
 
-    InfoToFront GetFromQuery() throws SQLException;
+    DataToFront GetFromQuery() throws SQLException;
 }

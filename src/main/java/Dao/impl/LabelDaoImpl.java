@@ -1,7 +1,8 @@
 package Dao.impl;
 
 import Dao.LabelDao;
-import Socket.InfoToFront;
+import Socket.DataToFront;
+import Socket.InfoFromFront;
 
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -15,7 +16,7 @@ public class LabelDaoImpl extends BaseDao implements LabelDao {
      * Now the version is to get all the Label
      */
     @Override
-    public InfoToFront GetMainLabels() throws SQLException {
+    public DataToFront GetMainLabels(InfoFromFront infoFromFront) throws SQLException {
         List<String> labelList = new LinkedList<String>();
         getConnection();
 
@@ -36,14 +37,15 @@ public class LabelDaoImpl extends BaseDao implements LabelDao {
      *  hot_spot（热度） algorithm: For all the books in each sublabel
      *  Caculate the wighting average of bought(0.8),review(0.1), danmu(0.1) amounts.
      *
-     * @param MainLabels
+     * param MainLabels
      * @return List of sublabel order by hot_spot.
      * @throws SQLException
      */
     @Override
-    public InfoToFront GetSubLabels(String MainLabels) throws SQLException {
+    public DataToFront GetSubLabels(InfoFromFront infoFromFront) throws SQLException {
+        String mainLabels = infoFromFront.getMainLabel();
         List<String> labelList = new LinkedList<String>();
-        InfoToFront infoToFront = new InfoToFront();
+        DataToFront dataToFront = new DataToFront();
         getConnection();
 
         String sql =
@@ -57,7 +59,7 @@ public class LabelDaoImpl extends BaseDao implements LabelDao {
                 "order by hot_spot desc" +
                         "where l.name = ?";
 
-        pstmt.setString(1,MainLabels);
+        pstmt.setString(1,mainLabels);
         pstmt = conn.prepareStatement(sql);
         rs = pstmt.executeQuery();
 

@@ -1,23 +1,26 @@
 package Dao.impl;
 
 import Dao.UserDao;
-import Socket.InfoToFront;
+import Socket.DataToFront;
+import Socket.InfoFromFront;
 import Socket.frontEnum.LoginStatus;
 
 import java.sql.SQLException;
 
 public class UserDaoImpl extends BaseDao implements UserDao {
 
-    public InfoToFront Login(String UserName, String EncodedPassword) throws SQLException {
+    public DataToFront Login(InfoFromFront infoFromFront) throws SQLException {
 
-        InfoToFront infoToFront = new InfoToFront();
-        infoToFront.setType("Login");
+        String userName = infoFromFront.getUserName();
+        String encodedPassword = infoFromFront.getEncodedPassword();
+        DataToFront dataToFront = new DataToFront();
+        dataToFront.setType("Login");
         try {
             getConnection();
 
             String sql = "select id, name, password_encode, authority from user u where u.name = ? ";
             pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, UserName);
+            pstmt.setString(1, userName);
             rs = pstmt.executeQuery();
             if (rs.next()) {
 
@@ -25,35 +28,41 @@ public class UserDaoImpl extends BaseDao implements UserDao {
                 int userId = rs.getInt("id");
                 Boolean isAdmin = rs.getBoolean("authority");
 
-                if (password.equals(EncodedPassword)) {
-                    infoToFront.setLoginStatus(LoginStatus.Success);
-                    infoToFront.setUserId(userId);
-                    infoToFront.setAdmin(isAdmin);
+                if (password.equals(encodedPassword)) {
+                    dataToFront.setLoginStatus(LoginStatus.Success);
+                    dataToFront.setUserId(userId);
+                    dataToFront.setAdmin(isAdmin);
                 } else {
-                    infoToFront.setLoginStatus(LoginStatus.WrongPassword);
+                    dataToFront.setLoginStatus(LoginStatus.WrongPassword);
                 }
             } else {
-                infoToFront.setLoginStatus(LoginStatus.NoSuchUser);
+                dataToFront.setLoginStatus(LoginStatus.NoSuchUser);
             }
 
             closeAll();
         }catch (SQLException e){
             e.printStackTrace();
         }
-        return infoToFront;
+        return dataToFront;
     }
 
     @Override
-    public InfoToFront GetMyReadList(int id, int from, int count) throws SQLException
+    public DataToFront GetMyReadList(InfoFromFront infoFromFront) throws SQLException
     {
+        int userid = infoFromFront.getUserId();
+        int from = infoFromFront.getFrom();
+        int count= infoFromFront.getCount();
         return null;
     }
 
     @Override
-    public InfoToFront SignUp(String userName, String mailAddr, String encodedPassword) throws SQLException
+    public DataToFront SignUp(InfoFromFront infoFromFront) throws SQLException
     {
-        InfoToFront infoToFront = new InfoToFront();
-        infoToFront.setType("SignUp");
+        String userName = infoFromFront.getUserName();
+        String mailAddr = infoFromFront.getMailAddr();
+        String encodedPassword = infoFromFront.getEncodedPassword();
+        DataToFront dataToFront = new DataToFront();
+        dataToFront.setType("SignUp");
 
         String sql = "INSERT INTO user (name, email, password_encode) value(?, ?, ?) ";
 
@@ -64,9 +73,9 @@ public class UserDaoImpl extends BaseDao implements UserDao {
 
         int rows = pstmt.executeUpdate();
 
-        if (rows == 1) infoToFront.setSuccess(true);
-        else infoToFront.setSuccess(false);
+        if (rows == 1) dataToFront.setSuccess(true);
+        else dataToFront.setSuccess(false);
 
-        return infoToFront;
+        return dataToFront;
     }
 }

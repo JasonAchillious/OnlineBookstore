@@ -1,22 +1,23 @@
 package Dao;
 
-import Socket.InfoToFront;
+import Socket.DataToFront;
+import Socket.InfoFromFront;
 
 import java.sql.SQLException;
 
 public interface ReadlistDao {
     // get the book's id from a user's readlist
-    InfoToFront GetMyReadlist(int userId, int from, int count);
+    DataToFront GetMyReadlist(InfoFromFront infoFromFront) throws SQLException;
 
     // get the details of this readlist.
-    InfoToFront GetTitleDescription(int readlistId);
+    DataToFront GetTitleDescription(InfoFromFront infoFromFront) throws SQLException;
 
     // issues : need to dicuss with the front.
-    InfoToFront ChangeReadList(int readListId, Enum ChangeType, int AlteredBookId, String AlteredText);
+    DataToFront ChangeReadList(InfoFromFront infoFromFront) throws SQLException;
 
     // user can create there own readList.
-    InfoToFront CreateReadList(int userId, String Title, String Description) throws SQLException;
+    DataToFront CreateReadList(InfoFromFront infoFromFront) throws SQLException;
 
     // follow or cancel following a readlist.
-    InfoToFront FollowReadList(int userId, boolean isFollowAction, int readlistId) throws SQLException;
+    DataToFront FollowReadList(InfoFromFront infoFromFront) throws SQLException;
 }

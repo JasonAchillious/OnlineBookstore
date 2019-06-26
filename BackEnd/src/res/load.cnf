@@ -1,0 +1,7 @@
+port_user = 2307
+port_admin = 2308
+database = bookstore
+user = service
+password_user = team309
+admin = admin
+password_admin = team309

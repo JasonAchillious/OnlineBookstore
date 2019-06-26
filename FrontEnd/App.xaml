@@ -1,0 +1,115 @@
+﻿<Application x:Class="Frontend.App"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls">
+
+	<Application.Resources>
+        <x:Double x:Key="ContentDialogMaxWidth">850</x:Double>
+        
+        <Style x:Key="TitleTextBoxStyle" TargetType="TextBox">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+        </Style>
+        <Style x:Key="DescriptionTextBoxStyle" TargetType="TextBox">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Margin" Value="0,10,0,0"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+
+        <Style x:Key="TitleTextStyle" TargetType="TextBlock">
+			<Setter Property="FontSize" Value="18"/>
+			<Setter Property="FontWeight" Value="SemiBold"/>
+			<Setter Property="TextWrapping" Value="WrapWholeWords"/>
+			<Setter Property="VerticalAlignment" Value="Bottom"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+        </Style>
+		<Style x:Key="DescriptionTextStyle" TargetType="TextBlock">
+			<Setter Property="FontSize" Value="16"/>
+			<Setter Property="VerticalAlignment" Value="Top"/>
+			<Setter Property="HorizontalAlignment" Value="Left"/>
+			<Setter Property="Margin" Value="0,10,0,0"/>
+            <Setter Property="TextWrapping" Value="WrapWholeWords"/>
+        </Style>
+		<Style x:Key="HorizontalBookNameTextStyle" TargetType="TextBlock">
+			<Setter Property="FontSize" Value="16"/>
+			<Setter Property="FontWeight" Value="SemiBold"/>
+			<Setter Property="VerticalAlignment" Value="Center"/>
+			<Setter Property="HorizontalAlignment" Value="Left"/>
+			<Setter Property="Margin" Value="10,2"/>
+            <Setter Property="TextWrapping" Value="WrapWholeWords"/>
+        </Style>
+		<Style x:Key="HorizontalBookTextStyle" TargetType="TextBlock">
+			<Setter Property="FontSize" Value="16"/>
+			<Setter Property="VerticalAlignment" Value="Center"/>
+			<Setter Property="HorizontalAlignment" Value="Left"/>
+			<Setter Property="Margin" Value="10,2"/>
+            <Setter Property="TextWrapping" Value="WrapWholeWords"/>
+        </Style>
+		<Style x:Key="VerticalBookNameTextStyle" TargetType="TextBlock">
+			<Setter Property="FontSize" Value="16"/>
+			<Setter Property="VerticalAlignment" Value="Top"/>
+			<Setter Property="Margin" Value="0,8,0,0"/>
+            <Setter Property="TextWrapping" Value="WrapWholeWords"/>
+        </Style>
+		<Style x:Key="VerticalBookTextStyle" TargetType="TextBlock">
+			<Setter Property="FontSize" Value="15"/>
+			<Setter Property="VerticalAlignment" Value="Top"/>
+			<Setter Property="Margin" Value="0,5,0,0"/>
+			<Setter Property="TextWrapping" Value="WrapWholeWords"/>
+            <Setter Property="Foreground" Value="{ThemeResource SystemAccentColorDark2}"/>
+        </Style>
+
+		<Style x:Key="SeparatorStyle" TargetType="NavigationViewItemSeparator">
+			<Setter Property="HorizontalAlignment" Value="Center"/>
+			<Setter Property="Width" Value="2000"/>
+		</Style>
+
+		<!--  Create a Style for the Books  -->
+		<Style x:Key="BookImageStyle" TargetType="Image">
+			<Setter Property="Stretch" Value="Uniform"/>
+			<Setter Property="HorizontalAlignment" Value="Left"/>
+			<Setter Property="VerticalAlignment" Value="Center"/>
+		</Style>
+		<Style x:Key="AGVStyle" TargetType="controls:AdaptiveGridView">
+			<Setter Property="OneRowModeEnabled" Value="False"/>
+			<Setter Property="DesiredWidth" Value="400"/>
+			<Setter Property="SelectionMode" Value="None"/>
+			<Setter Property="IsItemClickEnabled" Value="True"/>
+		</Style>
+		<Style x:Key="ListStyle" TargetType="ListView">
+			<Setter Property="SelectionMode" Value="None"/>
+			<Setter Property="IsItemClickEnabled" Value="True"/>
+		</Style>
+		<Style x:Key="BoardPanelStyle" TargetType="Grid">
+			<Setter Property="Background" Value="{StaticResource AppBarBackgroundThemeBrush}"/>
+			<Setter Property="Margin" Value="20,12"/>
+			<Setter Property="HorizontalAlignment" Value="Stretch"/>
+			<Setter Property="VerticalAlignment" Value="Stretch"/>
+		</Style>
+
+		<Style x:Key="ShowAllBtnStyle" TargetType="HyperlinkButton">
+			<Setter Property="Content" Value="Show All &gt;&gt;"/>
+			<Setter Property="FontSize" Value="16"/>
+			<Setter Property="VerticalAlignment" Value="Bottom"/>
+			<Setter Property="HorizontalAlignment" Value="Right"/>
+			<Setter Property="Padding" Value="0"/>
+			<Setter Property="Margin" Value="0"/>
+			<Setter Property="Foreground" Value="{ThemeResource SystemAccentColorDark2}"/>
+		</Style>
+
+        <SymbolIconSource x:Key="AddIcon" Symbol="Favorite"/>
+        <SymbolIconSource x:Key="RemoveIcon" Symbol="UnFavorite"/>
+		<SymbolIconSource x:Key="BuyIcon" Symbol="Shop"/>
+		<SymbolIconSource x:Key="EditIcon" Symbol="Edit"/>
+        <SymbolIconSource x:Key="DeleteIcon" Symbol="Delete"/>
+
+		<!--<FontIconSource x:Key="LargeEditIcon" FontSize="40" Glyph="&#xE104;"/>
+		<FontIconSource x:Key="LargeDeleteIcon" FontSize="40" Glyph="&#xE107;"/>-->
+
+	</Application.Resources>
+</Application>

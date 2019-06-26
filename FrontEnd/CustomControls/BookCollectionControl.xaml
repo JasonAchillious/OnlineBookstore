@@ -1,0 +1,77 @@
+﻿<UserControl x:Class="Frontend.CustomControls.BookCollectionControl"
+			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:local="using:Frontend"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:sys="using:System"
+			 d:DesignHeight="700"
+			 d:DesignWidth="1000"
+			 mc:Ignorable="d"
+             Loading="UserControl_Loading">
+
+	<RefreshContainer PullDirection="BottomToTop" RefreshRequested="RefreshRequested">
+		<controls:AdaptiveGridView x:Name="bookGrid"
+								   Padding="{x:Bind OutPadding}"
+								   ItemClick="BookGrid_ItemClick"
+								   ItemsSource="{x:Bind BookCollection.Books, Mode=OneWay}"
+								   Loaded="BookGrid_Loaded"
+								   Style="{StaticResource AGVStyle}">
+			<controls:AdaptiveGridView.Header>
+				<controls:ScrollHeader Mode="QuickReturn">
+					<StackPanel Background="White">
+						<TextBlock Style="{StaticResource TitleTextStyle}" Text=" "/>
+                        <TextBlock Style="{StaticResource TitleTextStyle}"
+                                   Text="{x:Bind BookCollection.Title, Mode=OneWay}"/>
+						<TextBlock Style="{StaticResource DescriptionTextStyle}"
+								   Text="{x:Bind BookCollection.Description, Mode=OneWay}"
+								   Visibility="{x:Bind DescriptionVisibility, Mode=OneWay}"/>
+						<TextBlock FontWeight="SemiLight"
+								   Style="{StaticResource DescriptionTextStyle}"
+								   Text="{x:Bind local:ReadlistPage.DateFollow(BookCollection.EditTime, BookCollection.FollowAmount, BookCollection.CreateUser), Mode=OneWay}"
+								   Visibility="{x:Bind UserInfoVisibility, Mode=OneWay}"/>
+						<NavigationViewItemSeparator Style="{StaticResource SeparatorStyle}"/>
+						<TextBlock Text=" "/>
+					</StackPanel>
+				</controls:ScrollHeader>
+			</controls:AdaptiveGridView.Header>
+			<controls:AdaptiveGridView.ItemTemplate>
+				<DataTemplate x:DataType="local:BookDetail">
+					<Grid MaxHeight="150"
+						  Margin="10"
+						  HorizontalAlignment="Left"
+						  VerticalAlignment="Center">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="3*"/>
+						</Grid.ColumnDefinitions>
+						<Image x:Name="bookCover"
+							   Grid.Column="0"
+							   Source="{x:Bind BookCover}"
+							   Style="{StaticResource BookImageStyle}"/>
+						<StackPanel Grid.Column="1">
+							<TextBlock Style="{StaticResource HorizontalBookNameTextStyle}" Text="{x:Bind BookName}"/>
+							<StackPanel Grid.Row="4"
+										Grid.Column="1"
+										Orientation="Horizontal">
+								<RatingControl Margin="10,0,10,-8"
+											   VerticalAlignment="Center"
+											   IsReadOnly="True"
+											   Value="{x:Bind OverallRating}"/>
+								<TextBlock Style="{StaticResource HorizontalBookTextStyle}"
+										   Text="{x:Bind sys:String.Format('({0:N1})', OverallRating)}"/>
+							</StackPanel>
+							<TextBlock Style="{StaticResource HorizontalBookTextStyle}"
+									   Text="{x:Bind local:BooklistPage.AuthorTrim(AuthorName)}"/>
+							<TextBlock Style="{StaticResource HorizontalBookTextStyle}"
+									   Text="{x:Bind sys:String.Format('Class:\\t{0}', Labels)}"/>
+							<TextBlock Style="{StaticResource HorizontalBookTextStyle}"
+									   Text="{x:Bind local:BooklistPage.PriceDiscount(Price, Discount)}"/>
+						</StackPanel>
+					</Grid>
+				</DataTemplate>
+			</controls:AdaptiveGridView.ItemTemplate>
+		</controls:AdaptiveGridView>
+	</RefreshContainer>
+</UserControl>

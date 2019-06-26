@@ -1,0 +1,72 @@
+﻿<Page x:Class="Frontend.SettingPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:extensions="using:Microsoft.Toolkit.Uwp.UI.Extensions"
+      xmlns:local="using:Frontend"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+      mc:Ignorable="d">
+
+    <Grid Margin="50,40">
+        <StackPanel HorizontalAlignment="Stretch" Spacing="35">
+            <ToggleSwitch HorizontalAlignment="Left"
+                          VerticalAlignment="Center"
+                          FontSize="18"
+                          Header="Show bullet screen while reading"
+                          IsOn="{x:Bind local:Storage.IsDanmuOn, Mode=TwoWay}"/>
+            <ComboBox HorizontalAlignment="Left"
+                      VerticalAlignment="Center"
+                      FontSize="18"
+                      Header="Color of bullets"
+                      SelectedIndex="0"
+                      SelectionChanged="ComboBox_SelectionChanged">
+                <x:String>Black</x:String>
+                <x:String>Red</x:String>
+                <x:String>Green</x:String>
+                <x:String>Blue</x:String>
+                <x:String>Theme color</x:String>
+                <x:String>Pick color</x:String>
+            </ComboBox>
+            <ComboBox HorizontalAlignment="Left"
+                      VerticalAlignment="Center"
+                      FontSize="18"
+                      Header="Font size of bullets"
+                      IsEditable="True"
+                      SelectedIndex="5"
+                      SelectedItem="{x:Bind local:Storage.DanmuSize}"
+                      TextSubmitted="ComboBox_TextSubmitted">
+                <ComboBox.TextBoxStyle>
+                    <Style TargetType="TextBox">
+                        <Setter Property="FontSize" Value="18"/>
+                        <Setter Property="extensions:TextBoxMask.Mask" Value="99"/>
+                    </Style>
+                </ComboBox.TextBoxStyle>
+                <x:Int32>10</x:Int32>
+                <x:Int32>12</x:Int32>
+                <x:Int32>14</x:Int32>
+                <x:Int32>16</x:Int32>
+                <x:Int32>18</x:Int32>
+                <x:Int32>20</x:Int32>
+                <x:Int32>24</x:Int32>
+                <x:Int32>28</x:Int32>
+            </ComboBox>
+            <Slider MinWidth="260"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    FontSize="18"
+                    Header="Spacing of bullets"
+                    Maximum="50"
+                    Minimum="0"
+                    Value="{x:Bind local:Storage.DanmuSpacing, Mode=TwoWay}"/>
+            <Slider MinWidth="260"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    FontSize="18"
+                    Header="Moving speed of bullets"
+                    Maximum="100"
+                    Minimum="10"
+                    Value="{x:Bind local:Storage.DanmuSpeed, Mode=TwoWay}"/>
+        </StackPanel>
+    </Grid>
+</Page>
